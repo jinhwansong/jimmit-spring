@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @OpenAPIDefinition(
         servers = {
                 @Server(url = "http://52.79.131.132:8083"),
-                @Server(url = "https://api.jammit.shop"),
+                @Server(url = "https://jimmit-spring.onrender.com"),
                 @Server(url = "http://localhost:8083")
         })
 @Configuration
