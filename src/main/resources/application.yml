@@ -1,0 +1,77 @@
+spring:
+  application:
+    name: JAMMIT_BE
+  lifecycle:
+    timeout-per-shutdown-phase: 120
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME:postgres}?sslmode=require&prepareThreshold=0
+    driver-class-name: org.postgresql.Driver
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD}
+    hikari:
+      connection-timeout: 30000
+      maximum-pool-size: 10
+      minimum-idle: 5
+      ssl: true
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        generate_statistics: true
+        session_factory:
+          statement_inspector: com.jammit_be.common.monitor.QueryCountInspector
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: never
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+logging:
+  level:
+    org.hibernate.orm.jdbc.bind: trace    # Hibernate 바인딩 정보
+    org.hibernate.stat: off               # Hibernate 통계 정보
+    org.springframework.transaction: off  # 트랜잭션 디버깅
+
+jwt:
+  expiredAccessTokenMs: 86400000
+  expiredRefreshTokenMs: 86400000
+  secretKey: ENC(lh1kMo8tAKIdFO/qo3/D3uZY45ZGJ5W+OFTFjY8in/9LJR+Qs0QyV0S6FL1zFFznYPmoCLZcx2U=)
+
+## Supabase Storage 설정
+supabase:
+  url: ${SUPABASE_URL:https://tdpigwjkpkeybdnxxbgr.supabase.co}
+  service-role-key: ${SUPABASE_SERVICE_ROLE_KEY}
+  storage-bucket-name: ${STORAGE_BUCKET_NAME:jimmit}
+
+## Jasypt
+jasypt:
+  encryptor:
+    key: ${jasypt_key}
+
+server:
+  shutdown: graceful
+  port: ${PORT}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
