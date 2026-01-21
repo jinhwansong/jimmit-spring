@@ -50,7 +50,7 @@ logging:
 jwt:
   expiredAccessTokenMs: 86400000
   expiredRefreshTokenMs: 86400000
-  secretKey: ENC(lh1kMo8tAKIdFO/qo3/D3uZY45ZGJ5W+OFTFjY8in/9LJR+Qs0QyV0S6FL1zFFznYPmoCLZcx2U=)
+  secretKey: ${JWT_SECRET_KEY}
 
 ## Supabase Storage 설정
 supabase:
