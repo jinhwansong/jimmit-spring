@@ -22,4 +22,10 @@ public class SupabaseConfig {
                 .defaultHeader("Authorization", "Bearer " + supabaseProperties.getServiceRoleKey())
                 .build();
     }
+
+    @Bean
+    public WebClient defaultWebClient() {
+        return WebClient.builder()
+                .build();
+    }
 }

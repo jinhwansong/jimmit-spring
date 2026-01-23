@@ -73,12 +73,20 @@ public class SecurityConfig {
         // configuration.setAllowedOriginPatterns(Collections.singletonList("*"));
         configuration.setAllowedOriginPatterns(Arrays.asList(
         "http://localhost:3000",           // 로컬 개발
-            "https://jimmit-frontend.vercel.app" // 프로덕션 프론트엔드
+            "https://www.jimmit.store" // 프로덕션 프론트엔드
         ));
         configuration.setExposedHeaders(Arrays.asList("Authorization", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"));
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
 
+
+        // Health check용 설정 (모든 origin 허용)
+        CorsConfiguration healthCheckConfig = new CorsConfiguration();
+        healthCheckConfig.setAllowedMethods(Arrays.asList("GET", "OPTIONS"));
+        healthCheckConfig.setAllowedHeaders(Collections.singletonList("*"));
+        healthCheckConfig.setAllowedOriginPatterns(Collections.singletonList("*"));
+        healthCheckConfig.setAllowCredentials(false);
+        healthCheckConfig.setMaxAge(3600L);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

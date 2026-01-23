@@ -58,6 +58,11 @@ supabase:
   service-role-key: ${SUPABASE_SERVICE_ROLE_KEY}
   storage-bucket-name: ${STORAGE_BUCKET_NAME:jimmit}
 
+## Resend Email API 설정
+resend:
+  api-key: ${RESEND_API_KEY}
+  from-email: ${RESEND_FROM_EMAIL:noreply@jammit.com}
+
 ## Jasypt
 jasypt:
   encryptor:
