@@ -73,7 +73,8 @@ public class SecurityConfig {
         // configuration.setAllowedOriginPatterns(Collections.singletonList("*"));
         configuration.setAllowedOriginPatterns(Arrays.asList(
         "http://localhost:3000",           // 로컬 개발
-            "https://www.jimmit.store" // 프로덕션 프론트엔드
+            "https://www.jimmit.store", // 프로덕션 프론트엔드
+            "https://jimmit-frontend.vercel.app" // 프로덕션 프론트엔드
         ));
         configuration.setExposedHeaders(Arrays.asList("Authorization", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"));
         configuration.setAllowCredentials(true);

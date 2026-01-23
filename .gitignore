@@ -39,6 +39,7 @@ out/
 # YAML 파일 무시
 *.yml
 !application.yml
+!.github/workflows/*.yml
 # 환경변수 파일
 .env
 .env.local
