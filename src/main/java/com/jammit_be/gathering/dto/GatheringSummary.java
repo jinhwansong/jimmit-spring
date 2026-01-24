@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -48,27 +49,40 @@ public class GatheringSummary {
     private final List<GatheringSessionInfo> sessions;
 
     public static GatheringSummary of(Gathering gathering) {
+        // 세션 중복 제거 (세션 ID 기준)
+        List<GatheringSession> distinctSessions = gathering.getGatheringSessions().stream()
+                .collect(Collectors.toMap(
+                        GatheringSession::getId,
+                        session -> session,
+                        (existing, replacement) -> existing,
+                        LinkedHashMap::new
+                ))
+                .values()
+                .stream()
+                .collect(Collectors.toList());
+
         return GatheringSummary.builder()
                 .id(gathering.getId())
                 .name(gathering.getName())
                 .place(gathering.getPlace())
                 .thumbnail(gathering.getThumbnail())
                 .gatheringDateTime(gathering.getGatheringDateTime())
-                .totalCurrent(gathering.getGatheringSessions().stream().mapToInt(GatheringSession::getRecruitCount).sum())
-                .totalRecruit(gathering.getGatheringSessions().stream().mapToInt(GatheringSession::getCurrentCount).sum())
+                .totalRecruit(distinctSessions.stream().mapToInt(GatheringSession::getRecruitCount).sum())
+                .totalCurrent(distinctSessions.stream().mapToInt(GatheringSession::getCurrentCount).sum())
                 .viewCount(gathering.getViewCount())
                 .recruitDeadline(gathering.getRecruitDeadline())
                 .status(gathering.getStatus())
                 .genres(gathering.getGenres())
                 .creator(CreatorInfo.of(gathering.getCreatedBy()))
                 .sessions(
-                        gathering.getGatheringSessions().stream()
+                        distinctSessions.stream()
                                 .map(session -> GatheringSessionInfo.builder()
                                         .bandSession(session.getName())
                                         .recruitCount(session.getRecruitCount())
                                         .currentCount(session.getCurrentCount())
                                         .build()
-                                ).collect(Collectors.toList())
+                                )
+                                .collect(Collectors.toList())
                 )
                 .build();
     }
