@@ -184,6 +184,7 @@ public class UserService {
         return new EmailCheckResponse(userRepository.existsUserByEmail(email));
     }
 
+    @Transactional
     public String uploadProfileImage(Long userId ,MultipartFile file) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AlertException("유저를 찾지 못하였습니다"));
@@ -194,6 +195,7 @@ public class UserService {
 
         String url = fileStorage.save(file, "profile");
         user.changeProfileImage(file.getOriginalFilename(), url);
+        userRepository.save(user);
 
         return url;
     }

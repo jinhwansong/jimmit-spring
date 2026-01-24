@@ -19,16 +19,20 @@ public class ResendEmailSender implements EmailSender {
 
     private final WebClient defaultWebClient;
 
-    @Value("${resend.api-key}")
+    @Value("${resend.api-key:}")
     private String apiKey;
 
-    @Value("${resend.from-email}")
+    @Value("${resend.from-email:noreply@jammit.com}")
     private String fromEmail;
 
     private static final String RESEND_API_URL = "https://api.resend.com/emails";
 
     @Override
     public void sendEmail(String to, String subject, String content) {
+        if (apiKey == null || apiKey.isEmpty()) {
+            throw new IllegalStateException("RESEND_API_KEY 환경변수가 설정되지 않았습니다. Render 환경변수에 RESEND_API_KEY를 설정해주세요.");
+        }
+        
         try {
             Map<String, Object> requestBody = new HashMap<>();
             requestBody.put("from", fromEmail);

@@ -60,7 +60,7 @@ supabase:
 
 ## Resend Email API 설정
 resend:
-  api-key: ${RESEND_API_KEY}
+  api-key: ${RESEND_API_KEY:}
   from-email: ${RESEND_FROM_EMAIL:noreply@jammit.com}
 
 ## Jasypt
