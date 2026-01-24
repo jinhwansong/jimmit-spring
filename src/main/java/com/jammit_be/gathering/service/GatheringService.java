@@ -2,7 +2,6 @@ package com.jammit_be.gathering.service;
 
 import com.jammit_be.auth.util.AuthUtil;
 import com.jammit_be.common.enums.BandSession;
-import com.jammit_be.common.enums.GatheringStatus;
 import com.jammit_be.common.enums.Genre;
 import com.jammit_be.common.exception.AlertException;
 import com.jammit_be.gathering.dto.CreatorInfo;
@@ -28,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -63,8 +61,12 @@ public class GatheringService {
 
         Gathering saved = gatheringRepository.save(gathering);
 
-        // 주최자 참여자로 저장
-        GatheringParticipant hostParticipant = GatheringParticipant.createHostParticipant(user, saved);
+        // 주최자 참여자로 저장 (gatheringSessions의 첫 번째 세션을 방장의 세션으로 지정)
+        if (sessionEntities.isEmpty()) {
+            throw new AlertException("모임에는 최소 하나의 세션이 필요합니다.");
+        }
+        BandSession hostSession = sessionEntities.get(0).getName(); // 첫 번째 세션을 방장의 세션으로 지정
+        GatheringParticipant hostParticipant = GatheringParticipant.createHostParticipant(user, saved, hostSession);
         gatheringParticipantRepository.save(hostParticipant);
 
 
